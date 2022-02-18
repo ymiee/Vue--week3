@@ -31,7 +31,7 @@
                 <td width="120">{{ item.price }}</td>
                 <td width="150">
                   <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" :id="item.id" :checked="item.is_enabled" @click="toggleEnabled(item.id)">
+                    <input class="form-check-input" type="checkbox" role="switch" :id="item.id" :checked="item.is_enabled" @click="toggleEnabled(item)">
                     <label class="form-check-label" :for="item.id" :class="{'text-success': !item.is_enabled}">{{ item.is_enabled ? '啟用' : '未啟用'}}</label>
                   </div>
                 </td>                      

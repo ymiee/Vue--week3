@@ -1,13 +1,13 @@
 import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.26/vue.esm-browser.min.js";
 
+const API_URL = 'https://vue3-course-api.hexschool.io/v2';
+const API_PATH = 'ymiee';
 let delProductModal = null;
 let productModal = null;
 
 const app = createApp({
   data() {
     return {
-      url: 'https://vue3-course-api.hexschool.io/v2',
-      api_Path: 'ymiee',
       products: [],
       isNew: false,
       itemTemp: {
@@ -19,13 +19,13 @@ const app = createApp({
   mounted() {    
     // 使用 new 建立 bootstrap Modal，拿到實體 DOM 並賦予到變數上
     // 新增 和 編輯共用 productModal
-    productModal = new bootstrap.Modal(document.getElementById('productModal'), {
+      productModal = new bootstrap.Modal(document.getElementById('productModal'), {
+        keyboard: false
+    });
+    // 刪除使用 delProductModal
+      delProductModal = new bootstrap.Modal(document.getElementById('delProductModal'), {
       keyboard: false
-  });
-  // 刪除使用 delProductModal
-    delProductModal = new bootstrap.Modal(document.getElementById('delProductModal'), {
-    keyboard: false
-  });
+    });
   },
 
   created() {
@@ -42,36 +42,39 @@ const app = createApp({
   methods: {
     // 確認是否登入
     checkLogin() {      
-      axios.post(`${this.url}/api/user/check`)
-      .then((res) => {
-        // 取得產品資料
-        this.getProductsData();
-      })
-      .catch((err) => {
-        // 顯示錯誤訊息
-        alert(err.data.message);
-        // coolkie 不存在轉回登入頁面
-        window.location = 'login.html';
-      })
+      axios.post(`${API_URL}/api/user/check`)
+        .then(() => {
+          // 取得產品資料
+          this.getProductsData();
+        })
+        .catch((err) => {
+          // 顯示錯誤訊息
+          alert(err.data.message);
+          // coolkie 不存在轉回登入頁面
+          window.location = 'login.html';
+        })
     },
     // 取得所有產品資料
     getProductsData() {
-      axios.get(`${this.url}/api/${this.api_Path}/admin/products`)
-      .then((res) => {
-        const { products } = res.data;
-        this.products = products;
-      })
-      .catch((err) => {
-        alert(err.data.message);        
-      })
+      axios.get(`${API_URL}/api/${API_PATH}/admin/products`)
+        .then((res) => {
+          const { products } = res.data;
+          this.products = products;
+        })
+        .catch((err) => {
+          alert(err.data.message);        
+        })
     },
     // 啟用/未啟用
-    toggleEnabled(id) {
-      this.products.forEach((item, index, arr) => {
-        if(item.id == id) {
-          this.products[index].is_enabled = !item.is_enabled 
-        }
-      })
+    toggleEnabled(item) {
+      // 拷貝
+      let newItem = { ...item };
+      // 判斷改寫
+      newItem.is_enabled = (item.is_enabled == 0 ? 1 : 0);
+      this.itemTemp = newItem; 
+      this.isNew = false;
+      // 更新
+      this.updateProduct();
     },
     
     //  開啟bs modal
@@ -93,19 +96,19 @@ const app = createApp({
     },
     //  更新 或 新增  產品
     updateProduct() {
-      let url = `${this.apiUrl}/api/${this.apiPath}/admin/product`;
-      let http = 'post';
+      let url = `${API_URL}/api/${API_PATH}/admin/product`;
+      let method = 'post';
     
       // 根據 isNew 來判斷要串接 post 或是 put API
       if (!this.isNew) {
         // 編輯狀態
-        url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
-        http = 'put';
+        url = `${API_URL}/api/${API_PATH}/admin/product/${this.itemTemp.id}`;
+        method = 'put';
       }    
       // post 和 put 使用參數相同，成功後的行為相同（函式架構相同），所以合併
-      axios[http](api, { data: this.tempProduct })
-        .then((response) => {
-          alert(response.data.message); 
+      axios[method](url, { data: this.itemTemp })
+        .then((res) => {
+          alert(res.data.message); 
           productModal.hide();
           this.getProductsData();
         }).catch((err) => {
@@ -114,20 +117,20 @@ const app = createApp({
     },
     //  刪除產品
     delProduct() {
-      const url = `${this.apiUrl}/api/${this.apiPath}/admin/product/${this.tempProduct.id}`;
-
-      axios.delete(url).then((response) => {
-        alert(response.data.message);
-        delProductModal.hide();
-        this.getProductsData();
-      }).catch((err) => {
-        alert(err.data.message);
-      })
+      const url = `${API_URL}/api/${API_PATH}/admin/product/${this.itemTemp.id}`;
+      axios.delete(url)
+        .then((res) => {
+          alert(res.data.message);
+          delProductModal.hide();
+          this.getProductsData();
+        }).catch((err) => {
+          alert(err.data.message);
+        })
     },
     // 新增圖片
     addImages() {
-      this.tempProduct.imagesUrl = [];
-      this.tempProduct.imagesUrl.push('');
+      this.itemTemp.imagesUrl = [];
+      this.itemTemp.imagesUrl.push('');
     },
   },     
 });
