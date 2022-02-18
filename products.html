@@ -30,18 +30,11 @@
                 <td width="120">{{ item.origin_price }}</td>
                 <td width="120">{{ item.price }}</td>
                 <td width="150">
-<<<<<<< HEAD
                   <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" :id="item.id" :checked="item.is_enabled" @click="toggleEnabled(item.id)">
                     <label class="form-check-label" :for="item.id" :class="{'text-success': !item.is_enabled}">{{ item.is_enabled ? '啟用' : '未啟用'}}</label>
                   </div>
-                </td>                
-=======
-                  <span :class="{'text-success' : item.is_enabled  ,'text-danger' : !item.is_enabled }">
-                    {{item.is_enabled ? '啟用'  :'未啟用'}}  
-                  </span>
-                </td>
->>>>>>> bbdeed9b6736dcce3b14e3b3b65c2ce56ff43348
+                </td>                      
                 <td width="120">
                   <div class="btn-group">    
                     <button type="button" class="btn btn-outline-primary btn-sm" id="editProductBtn" @click="openModal('edit', item)">
@@ -55,7 +48,6 @@
               </tr>
             </tbody>
           </table>
-<<<<<<< HEAD
           <p>目前有 <span>{{ products.length }}</span> 項產品</p>
           <div class="text-end mt-4">
             <button class="btn btn-primary" id="addProductBtn" @click="openModal('new')">
@@ -119,94 +111,77 @@
                       </div>                      
                     </div>
                     <div class="col-sm-8">
+                      <!-- 標題 -->
                       <div class="mb-3">
                         <label for="title" class="form-label">標題</label>
                         <input id="title" type="text" class="form-control" 
                                 placeholder="請輸入標題" v-model="itemTemp.title">
                       </div>
-
                       <div class="row">
+                        <!-- 分類 -->
                         <div class="mb-3 col-md-6">
                           <label for="category" class="form-label">分類</label>
                           <input id="category" type="text" class="form-control" 
                                   placeholder="請輸入分類" v-model="itemTemp.category">
                         </div>
+                        <!-- 單位 -->
                         <div class="mb-3 col-md-6">
                           <label for="price" class="form-label">單位</label>
                           <input id="unit" type="text" class="form-control" 
                                   placeholder="請輸入單位" v-model="itemTemp.unit">
                         </div>
                       </div>
-
                       <div class="row">
+                        <!-- 原價 -->
                         <div class="mb-3 col-md-6">
                           <label for="origin_price" class="form-label">原價</label>
                           <input id="origin_price" type="number" min="0" class="form-control" 
                                   placeholder="請輸入原價" v-model.number="itemTemp.origin_price">
                         </div>
+                        <!-- 售價 -->
                         <div class="mb-3 col-md-6">
                           <label for="price" class="form-label">售價</label>
                           <input id="price" type="number" min="0" class="form-control"
                                   placeholder="請輸入售價" v-model.number="itemTemp.price">
                         </div>
-                      </div>
-
-                      <hr>
-                      <!-- 編輯產品 -->
+                      </div>      
+                                                          
                       <div class="mb-3">
+                        <!-- 產品描述 -->
                         <label for="description" class="form-label">產品描述</label>
                         <textarea id="description" type="text" class="form-control"
                                     placeholder="請輸入產品描述" v-model="itemTemp.description">
                         </textarea>
                       </div>
                       <div class="mb-3">
+                        <!-- 說明內容 -->
                         <label for="content" class="form-label">說明內容</label>
                         <textarea id="description" type="text" class="form-control"
                                     placeholder="請輸入說明內容" v-model="itemTemp.content">
                         </textarea>
                       </div>
                       <div class="mb-3">
+                        <!-- 啟用 -->
                         <div class="form-check">
                           <input id="is_enabled" class="form-check-input" type="checkbox"
                                 :true-value="1" :false-value="0" v-model="itemTemp.is_enabled">
                           <label class="form-check-label" for="is_enabled">是否啟用</label>
                         </div>
                       </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                          取消
+                        </button>
+                        <button type="button" class="btn btn-primary" @click="updateProduct" >
+                          確認
+                        </button>
+                      </div>  
                     </div>
                   </div>
-=======
-          <p>目前有 <span>{{ products.length }}</span> 項產品</p>      
-        </div>
-        <div class="col-md-6">
-          <h2>單一產品細節</h2>
-          <template v-if="itemTemp.id">
-            <div class="card mb-3">
-              <img v-bind:src="itemTemp.imageUrl" class="card-img-top primary-image" alt="主圖">
-              <div class="card-body">
-                <h5 class="card-title">
-                  {{ itemTemp.title }}
-                  <span class="badge bg-primary ms-2">{{ itemTemp.category }}</span>
-                </h5>
-                <p class="card-text">商品描述：{{ itemTemp.description }}</p>
-                <p class="card-text">商品內容：{{ itemTemp.content }}</p>
-                <div class="d-flex">
-                  <p class="card-text me-2">{{ itemTemp.price }}</p>
-                  <p class="card-text text-secondary"><del>{{ itemTemp.origin_price }}</del></p>
-                  {{ }} / 元
->>>>>>> bbdeed9b6736dcce3b14e3b3b65c2ce56ff43348
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    取消
-                  </button>
-                  <button type="button" class="btn btn-primary" @click="updateProduct">
-                    確認
-                  </button>
-                </div>
-              </div>
-            </div>
-<<<<<<< HEAD
-          </div>
+              </div> 
+            </div>  
+          </div>        
           <!-- 刪除產品 -->
           <div id="delProductModal" ref="delProductModal" class="modal fade" tabindex="-1"
             aria-labelledby="delProductModalLabel" aria-hidden="true">
@@ -233,21 +208,13 @@
               </div>
             </div>
           </div>
-        </div>         
-=======
-            <template v-for="item in itemTemp.imagesUrl">
-              <img v-if="itemTemp.id" v-bind:src="item" alt="" class="images m-2">
-            </template>
-          </template>
-          <p class="text-secondary" v-else>請選擇一個商品查看</p>
-        </div>
->>>>>>> bbdeed9b6736dcce3b14e3b3b65c2ce56ff43348
+        </div>        
       </div>
     </div>
   </div>  
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js'
-      integrity='sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=='
-      crossorigin='anonymous'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.9.1/axios.min.js"
+      integrity="sha512-Xk3wWei2TGrsh9kDSBKUMIjw/86sLUvhtnv9f7fOuIwhhiUTKz8szkWkzHthrM5Bb3Bu9idSzkxOrkzhcneuiw=="
+      crossorigin="anonymous"></script>
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"
       integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG"
